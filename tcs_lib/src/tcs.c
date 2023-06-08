@@ -3,6 +3,7 @@
 
 #include <time.h>
 
+// Delay code for the specified amount of microseconds
 void delay(uint32_t delay_micro) {
     // Compute target time
     volatile clock_t target_time = clock() + ((delay_micro * CLOCKS_PER_SEC)/1000000);
@@ -28,9 +29,6 @@ static void tcsRead(uint8_t reg, uint8_t *data, uint8_t dataNb) {
 	I2C_Master_Receive(TCS_I2C_READ, data, dataNb);
 }
 
-// Get a measure from a powered-down TCS. Returns it back to sleep afterwards.
-// You must pass a pointer to a 16-bit uint array long enough for 4 values.
-// The returned array follows the following format: [red, green, blue, clear]
 void tcsGetStandaloneRgbc(uint16_t *rgbc) {
 	// Power-on the TCS
 	tcsWrite(TCS_ENABLE, TCS_ENABLE_PON);

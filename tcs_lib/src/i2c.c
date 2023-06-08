@@ -21,9 +21,6 @@ void I2C_Master_Transmit(uint8_t addr, uint8_t *buffer, uint8_t size) {
         strcat(cmd, tmp);
     }
 
-    // Debug print
-    //printf("%s\n", cmd);
-
     // Run command
     int ret = system(cmd);
     (void)ret;
@@ -60,20 +57,3 @@ void I2C_Master_Receive(uint8_t addr, uint8_t *buffer, uint8_t size) {
         sscanf(token+2, "%2hhx", &buffer[i]);
     }
 }
-
-/*
-int main(int argc, int *argv[]) {
-    uint8_t reg = 0x80;
-    uint8_t data = 0x01;
-    uint8_t buffer_w[] = {reg, data};
-    I2C_Master_Transmit(0x52, buffer_w, 2);
-
-    uint8_t buffer_r[6];
-    I2C_Master_Receive(0x53, buffer_r, 6);
-
-    for (int i = 0; i < 6; ++i) {
-        printf("0x%02x: %d\n", buffer_r[i], buffer_r[i]);
-    }
-}
-*/
-
