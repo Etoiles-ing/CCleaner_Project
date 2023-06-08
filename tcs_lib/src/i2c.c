@@ -50,6 +50,9 @@ void I2C_Master_Receive(uint8_t addr, uint8_t *buffer, uint8_t size) {
     // Read the output line
     char output[50];
     fgets(output, sizeof(output), fp);
+    
+    // Wait for child process to terminate
+    pclose(fp);
 
     // Parse output to buffer
     for (int i = 0; i < size; ++i) {
