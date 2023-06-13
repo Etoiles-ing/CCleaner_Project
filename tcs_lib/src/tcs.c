@@ -36,8 +36,8 @@ void tcsGetStandaloneRgbc(uint16_t *rgbc) {
 	// Wait at least 2.4ms
 	delay(2500);
 
-	// Enable 4x gain
-	tcsWrite(TCS_CONTROL, TCS_CONTROL_AGAIN_0);
+	// Set integration time to 20 cycles (48ms)
+	tcsWrite(TCS_ATIME, 0xEB);
 
 	// Activate the ADC to start a RGBC measure
 	tcsWrite(TCS_ENABLE, TCS_ENABLE_AEN | TCS_ENABLE_PON);
