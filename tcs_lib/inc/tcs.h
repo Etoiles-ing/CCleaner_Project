@@ -104,6 +104,12 @@
 #define TCS_STATUS_AVALID_Msk         (0x1U << TCS_STATUS_AVALID_Pos)
 #define TCS_STATUS_AVALID             TCS_STATUS_AVALID_Msk
 
+/**
+  * @brief  Get a measure from a powered-down TCS. Returns it back to sleep afterwards.
+  * @param  rgbc pointer to a 16-bit uint array long enough for 4 values.
+  *         The returned array follows the following format: [red, green, blue, clear]
+  * @retval none
+  * */
 void tcsGetStandaloneRgbc(uint16_t *rgbc);
 
 #endif /* INC_TCS_H_ */
