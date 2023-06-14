@@ -51,6 +51,10 @@ class PID_controller:
 		self.old_error = error
 
 		pid = float(proportional + integral + derivative)
+		if (pid<0):
+			pid=max(pid,-90)
+		else:
+			pid=min(pid,90)
 		#print(self.sum_integral)
 		
 		#integral_sum_load = float(self.sum_integral/self.isat)
@@ -70,23 +74,36 @@ class MinimalPublisher(Node):
   
 		self.i = 0
 		self.valeurgb= rgbtype()#specific topicof the RGB sensor
-		self.pidangle=PID_controller(3,2.0,0,60)#todo Change the values of the PID
+		self.pidangle=PID_controller(0.2,0,0,60)#todo Change the values of the PID
 
 	   
 	def get_RGBvalue(self, msgsub):
 		self.valeurgb=msgsub
 
 	def pid_send(self):
-		error=(self.valeurgb.r+self.valeurgb.g+self.valeurgb.b)/(3*2.55)#todo Change the value of the error and the consigne
-		error=error-28#todo Change the value of the error and the consigne
+		# Error black and white
+		"""
+		error=(self.valeurgb.r+self.valeurgb.g+self.valeurgb.b)/3#todo Change the value of the error and the consigne
+		error -= 38#todo Change the value of the error and the consigne
+		error *= -1
+		self.get_logger().info('RGB: %d %d %d Error: "%f"' % (self.valeurgb.r, self.valeurgb.g, self.valeurgb.b, error))
 		white=self.valeurgb.c    
+		"""
+		if self.valeurgb.c > 45:
+			self.destroy_node()
+			rclpy.shutdown()
+
+		error = self.valeurgb.c
+		error -= 15
+		error *= -4
+		self.get_logger().info('Clear: %d Error: "%f"' % (self.valeurgb.c, error))
 		angle=self.pidangle.compute(0.1,error)#todo Change the value of the dt
 	 
 	 
 		msg = Twist() 
-		msg.linear.x=0.5#self.order.straight; #todo Change the value of the speed
+		msg.linear.x=0.05#self.order.straight; #todo Change the value of the speed
 		#msg.angular.z=self.order.rotate*PI# left or right
-		msg.angular.z=angle#todo want a float
+		msg.angular.z=(angle*PI)/90#todo want a float
 		self.publisher_.publish(msg)
 		self.i += 1
 
